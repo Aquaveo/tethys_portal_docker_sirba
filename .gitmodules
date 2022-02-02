@@ -1,0 +1,8 @@
+[submodule "tethysapp-dam_inventory"]
+	path = tethysapp-dam_inventory
+	url = https://github.com/tethysplatform/tethysapp-dam_inventory
+	branch = advanced-solution
+[submodule "tethysapp-postgis_app"]
+	path = tethysapp-postgis_app
+	url = https://github.com/tethysplatform/tethysapp-postgis_app
+	branch = master
