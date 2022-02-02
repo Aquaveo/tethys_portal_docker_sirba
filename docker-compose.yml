@@ -1,0 +1,59 @@
+version: "3"
+services:
+  db:
+    image: postgis/postgis:12-2.5
+    restart: always
+    networks:
+      - "internal"
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./env/db.env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  geoserver:
+    image: tethysplatform/geoserver:latest
+    restart: always
+    networks:
+      - "internal"
+      - "external"
+    ports:
+      - "8181:8181"
+    env_file:
+      - ./env/geoserver.env
+    volumes:
+      - ./data/geoserver:/var/geoserver/data
+
+  redis:
+    image: redis:latest
+    restart: always
+    networks:
+      - "internal"
+    ports:
+      - "6379:6379"
+
+  web:
+    image: tethys-portal-docker:latest
+    build: .
+    restart: always
+    depends_on:
+      - "db"
+      - "geoserver"
+      - "redis"
+    networks:
+      - "internal"
+      - "external"
+    ports:
+        - "80:80"
+    env_file:
+      - ./env/web.env
+    volumes:
+      - ./data/tethys:/var/lib/tethys_persist
+      - ./logs/tethys:/var/log/tethys
+
+
+networks:
+  internal:
+    internal: true
+  external:
